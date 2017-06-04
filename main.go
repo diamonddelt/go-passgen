@@ -1,23 +1,31 @@
 package main
 
 import (
+	"crypto/rand"
+	"encoding/base64"
 	"flag"
 	"fmt"
 	"os"
-	"reflect"
 )
 
 func main() {
 	d := getDir()
 	fmt.Println(d) // display the current directory ; needed later for printing to file
 
+	// --- BEGIN CLI FLAGS ---
 	lengthFlagPtr := flag.Int("length", 8, "a number representing the length of the password to generate") // returns an &int
+	// --- END CLI FLAGS ---
 
 	flag.Parse() // parse commandline args
 
+	p := generatePassword(lengthFlagPtr)
+	fmt.Printf("Your password is: %s", p)
+
 	// use Go's reflect package to inspect variable type at runtime ; NOTE: reflection is SLOW
-	fmt.Println(reflect.TypeOf(lengthFlagPtr))
-	fmt.Printf("Length: %d", *lengthFlagPtr)
+	// --- DEBUG FLAGS ---
+	// fmt.Println(reflect.TypeOf(lengthFlagPtr))
+	// fmt.Printf("Length: %d", *lengthFlagPtr)
+	// --- END DEBUG FLAGS ---
 }
 
 // Password which adheres to NIST recommendations
@@ -32,15 +40,22 @@ type Password struct {
 }
 
 // Unexported method to derive password based on the Password struct it receives
-func (p *Password) generatePassword() (string, bool) {
-	// TODO: logic to generate password
-	// use golang crypto/rand library instead of default rand
-	// research a 'byte slice' for this
+// Must be a 'CSPRNG' - "Cryptographically Secure Pseudo-Random Number Generator"
+// Requires crypto/rand and encoding/base64 packages
+func generatePassword(l *int) string {
+	// generate cryptographically secure byte slice
+	b := make([]byte, *l)
+	_, err := rand.Read(b)
+	if err != nil {
+		panic(err)
+	}
 
-	return "", true
+	// encode the byte slice to base64 for general usage
+	p := base64.URLEncoding.EncodeToString(b) // TODO: research why we use base64 encoding
+	return p
 }
 
-// Validate user is in a useable directory
+// Get working directory of the application
 func getDir() string {
 	d, err := os.Getwd()
 	if err != nil {
