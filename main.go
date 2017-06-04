@@ -9,17 +9,23 @@ import (
 )
 
 func main() {
-	d := getDir()
-	fmt.Println(d) // display the current directory ; needed later for printing to file
+	// d := getDir()
+	// fmt.Println(d) // display the current directory ; needed later for printing to file
 
 	// --- BEGIN CLI FLAGS ---
-	lengthFlagPtr := flag.Int("length", 8, "a number representing the length of the password to generate") // returns an &int
+	numberFlagPtr := flag.Int("number", 1, "the number of passwords to generate")     // returns an &int
+	lengthFlagPtr := flag.Int("length", 8, "the length of each password to generate") // returns an &int
 	// --- END CLI FLAGS ---
 
-	flag.Parse() // parse commandline args
+	flag.Parse() // parse commandline args - MUST BE CALLED AFTER ALL FLAGS ARE INITIALIZED
 
-	p := generatePassword(lengthFlagPtr)
-	fmt.Printf("Your password is: %s", p)
+	// TODO: Move this into its own function
+	// TODO: Refactor with goroutines and channels
+	// generate desired number of passwords
+	for i := 0; i < *numberFlagPtr; i++ {
+		p := generatePassword(lengthFlagPtr)
+		fmt.Printf("Your password is: %s\n", p)
+	}
 
 	// use Go's reflect package to inspect variable type at runtime ; NOTE: reflection is SLOW
 	// --- DEBUG FLAGS ---
@@ -51,7 +57,8 @@ func generatePassword(l *int) string {
 	}
 
 	// encode the byte slice to base64 for general usage
-	p := base64.URLEncoding.EncodeToString(b) // TODO: research why we use base64 encoding
+	// base64 is safe for URI headers, HTTP forms, JSON, and plaintext usage
+	p := base64.URLEncoding.EncodeToString(b)
 	return p
 }
 
