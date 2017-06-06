@@ -8,14 +8,12 @@
 
 # Flags
 - -length = (int) the length of the password you wish to generate.
-    - DEFAULT VALUE = 8 characters
+    - DEFAULT VALUE = 8
+- -number = (int) the number of passwords you wish to generate.
+    - DEFAULT VALUE = 1
 
 # Usage
-* passgen -length=12
-* $ Your password is: eX28d0_32ds=
-
-# TODO
-1. Optionally support writing the password to a file
-2. Add tests to the codebase
-3. Add benchmarks to the codebase
-
+* passgen -length=12 -number=3
+* $ Password #1 is: oBXOR8_D5nnyOM0A
+* $ Password #2 is: MSiFR8Gx1yLOJc5V
+* $ Password #3 is: LmYGE03tL2aPLPsL
