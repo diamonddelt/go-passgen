@@ -16,4 +16,6 @@
 
 # TODO
 1. Optionally support writing the password to a file
+2. Add tests to the codebase
+3. Add benchmarks to the codebase
 

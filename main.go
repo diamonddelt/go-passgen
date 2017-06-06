@@ -6,26 +6,31 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"time"
 )
 
 func main() {
+	start := time.Now() // crude execution time benchmarking
+
 	// d := getDir()
 	// fmt.Println(d) // display the current directory ; needed later for printing to file
 
 	// --- BEGIN CLI FLAGS ---
-	numberFlagPtr := flag.Int("number", 1, "the number of passwords to generate")     // returns an &int
-	lengthFlagPtr := flag.Int("length", 8, "the length of each password to generate") // returns an &int
+	n := flag.Int("number", 1, "the number of passwords to generate")     // returns an &int
+	l := flag.Int("length", 8, "the length of each password to generate") // returns an &int
 	// --- END CLI FLAGS ---
 
 	flag.Parse() // parse commandline args - MUST BE CALLED AFTER ALL FLAGS ARE INITIALIZED
 
-	// TODO: Move this into its own function
-	// TODO: Refactor with goroutines and channels
 	// generate desired number of passwords
-	for i := 0; i < *numberFlagPtr; i++ {
-		p := generatePassword(lengthFlagPtr)
-		fmt.Printf("Your password is: %s\n", p)
+	r := generatePasswords(n, l)
+	for i, v := range r {
+		ct := i + 1 // user friendly counter
+		fmt.Printf("Password #%d: %s\n", ct, v)
 	}
+
+	elapsed := time.Since(start)
+	fmt.Printf("Elapsed time: %s", elapsed) // crude execution time benchmarking
 
 	// use Go's reflect package to inspect variable type at runtime ; NOTE: reflection is SLOW
 	// --- DEBUG FLAGS ---
@@ -35,6 +40,7 @@ func main() {
 }
 
 // Password which adheres to NIST recommendations
+// Use this later
 type Password struct {
 	id             string // the actual password string
 	length         int    // could also be int16, int32, or int64
@@ -42,10 +48,8 @@ type Password struct {
 	isNumeric      bool
 	isAlphanumeric bool
 	isAlphabetical bool
-	// TODO: research https://golang.org/pkg/flag/
 }
 
-// Unexported method to derive password based on the Password struct it receives
 // Must be a 'CSPRNG' - "Cryptographically Secure Pseudo-Random Number Generator"
 // Requires crypto/rand and encoding/base64 packages
 func generatePassword(l *int) string {
@@ -60,6 +64,15 @@ func generatePassword(l *int) string {
 	// base64 is safe for URI headers, HTTP forms, JSON, and plaintext usage
 	p := base64.URLEncoding.EncodeToString(b)
 	return p
+}
+
+func generatePasswords(n *int, l *int) []string {
+	var r []string
+	for i := 0; i < *n; i++ {
+		p := generatePassword(l)
+		r = append(r, p)
+	}
+	return r
 }
 
 // Get working directory of the application
