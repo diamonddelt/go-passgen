@@ -1,1 +1,7 @@
+# Developer notes
 *.txt
+
+# Compiled artifacts
+*.exe
+*.sh
+*.tar.gz
