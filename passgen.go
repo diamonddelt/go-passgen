@@ -3,27 +3,30 @@ package main
 import (
 	"flag"
 	"fmt"
-	"os"
 	"time"
 )
 
 func main() {
 	start := time.Now() // crude execution time benchmarking
 
-	// d := getDir()
-	// fmt.Println(d) // display the current directory ; needed later for printing to file
-
-	// --- BEGIN CLI FLAGS ---
+	// --- BEGIN CLI FLAGS
 	n := flag.Int("number", 1, "the number of passwords to generate")     // returns an &int
 	l := flag.Int("length", 8, "the length of each password to generate") // returns an &int
-	// --- END CLI FLAGS ---
+	f := flag.Bool("file", false, "boolean indicating whether the passwords should print to a file in the current directory")
+	// --- END CLI FLAGS
+	flag.Parse()
 
-	flag.Parse() // parse commandline args - MUST BE CALLED AFTER ALL FLAGS ARE INITIALIZED
-
-	r := GeneratePasswords(n, l)
-	for i, v := range r {
-		ct := i + 1 // user friendly counter
-		fmt.Printf("Password #%d: %s\n", ct, v)
+	r := GeneratePasswords(n, l) // get []string of passwords
+	if *f {
+		dir := GetDir()
+		// TODO: Support more than just .txt file extensions
+		ext := ".txt"
+		WritePasswordsToFile(&dir, &ext, &r)
+	} else {
+		for i, v := range r {
+			ct := i + 1
+			fmt.Printf("Password #%d: %s\n", ct, v)
+		}
 	}
 
 	elapsed := time.Since(start)
@@ -34,13 +37,4 @@ func main() {
 	// fmt.Println(reflect.TypeOf(lengthFlagPtr))
 	// fmt.Printf("Length: %d", *lengthFlagPtr)
 	// --- END DEBUG FLAGS ---
-}
-
-// Get working directory of the application
-func getDir() string {
-	d, err := os.Getwd()
-	if err != nil {
-		panic(err)
-	}
-	return d
 }
