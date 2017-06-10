@@ -6,7 +6,6 @@ import (
 )
 
 // Password which adheres to NIST recommendations
-// Use this later
 type Password struct {
 	id             string // the actual password string
 	length         int    // could also be int16, int32, or int64
@@ -33,8 +32,8 @@ func generatePassword(l *int) string {
 }
 
 // GeneratePasswords generates multiple random passwords
-// n = a pointer to a value specifying the number of passwords to generate (int)
-// l = a pointer to a value specifying the length of each password (int)
+// n (*int) = a pointer to a value specifying the number of passwords to generate (int)
+// l (*int) = a pointer to a value specifying the length of each password (int)
 // Returns an array of generated passwords ([]string)
 func GeneratePasswords(n *int, l *int) []string {
 	var r []string
