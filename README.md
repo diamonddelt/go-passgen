@@ -23,6 +23,6 @@
 * $ Password #3 is: LmYGE03tL2aPLPsL
 
 # Usage 2 (results written to file)
-* cd into desired directory: 'C:/Users/<USER>/Desktop'
+* cd into desired directory: 'C:/Users/USERNAME/Desktop'
 * $ passgen -length=12 -number=3 -file=true
-* $ "Password file generated at: C:\Users\<USER>\Desktop\passgen-output.txt"
+* $ "Password file generated at: C:\Users\USERNAME\Desktop\passgen-output.txt"
