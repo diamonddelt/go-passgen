@@ -1,7 +1,7 @@
 package main
 
 import (
-	"crypto/rand"
+	crand "crypto/rand"
 	"encoding/base64"
 )
 
@@ -18,9 +18,10 @@ type Password struct {
 // generatePassword generates a single cryptographically secure password.
 // l (*int) = a pointer to an integer representing the length of the password to generate.
 // Returns the base64-encoded password as a string.
+// NOTE: Test case revealed the length estimate is incorrect. Base64 if 4*(n/3), so need to factor this in
 func generatePassword(l *int) string {
 	b := make([]byte, *l)
-	_, err := rand.Read(b)
+	_, err := crand.Read(b)
 	if err != nil {
 		panic(err)
 	}
@@ -28,6 +29,9 @@ func generatePassword(l *int) string {
 	// encode the byte slice to base64 for general usage
 	// base64 is safe for URI headers, HTTP forms, JSON, and plaintext usage
 	p := base64.URLEncoding.EncodeToString(b)
+
+	// remove extra characters from encoding to match user length
+	p = p[:*l]
 	return p
 }
 
