@@ -3,6 +3,9 @@ package main
 import (
 	crand "crypto/rand"
 	"encoding/base64"
+	mrand "math/rand"
+	"strconv"
+	"time"
 )
 
 // Password which adheres to NIST recommendations
@@ -32,6 +35,24 @@ func generatePassword(l *int) string {
 	// remove extra characters from encoding to match user length
 	p = p[:*l]
 	return p
+}
+
+// generateNumericPassword generates a single non-cryptographically secure numeric password.
+// Uses the current datetime as a seed value for the RNG.
+// l (*int) = a pointer to an integer representing the length of the password to generate.
+// Returns the random number as an integer.
+func generateNumericPassword(l *int) int {
+	// Since numeric only passwords can be cracked very easily unless they are extremely long,
+	// this method foregoes the crypto/rand package for math/rand for ease of use
+	mrand.Seed(time.Now().UTC().UnixNano()) // consider moving this to main goroutine for highly concurrent usage
+
+	var r int
+	var tmps string
+	for i := 0; i < *l; i++ {
+		tmps += strconv.Itoa(mrand.Intn(9))
+	}
+	r, _ = strconv.Atoi(tmps) // don't care about the error right now
+	return r
 }
 
 // GeneratePasswords generates multiple random passwords

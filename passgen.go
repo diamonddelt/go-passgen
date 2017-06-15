@@ -13,8 +13,14 @@ func main() {
 	n := flag.Int("number", 1, "the number of passwords to generate")     // returns an &int
 	l := flag.Int("length", 8, "the length of each password to generate") // returns an &int
 	f := flag.Bool("file", false, "boolean indicating whether the passwords should print to a file in the current directory")
+
+	// TODO: Add the flag to take advantage of generateNumericPassword()
+	// TODO: Update the documentation
+
 	// --- END CLI FLAGS
 	flag.Parse()
+
+	fmt.Println(generateNumericPassword(l))
 
 	r := GeneratePasswords(n, l) // get []string of passwords
 	if *f {
