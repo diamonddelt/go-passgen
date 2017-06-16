@@ -15,6 +15,8 @@
     - DEFAULT VALUE = 1
 - -file = (bool) true/false indicating whether or not to write the generated passwords to the current working directory.
     - DEFAULT VALUE = false
+- -type = (string) a string indicating the type of password to generate. Currently supports "alphanumeric"/"a" or "numeric"/"n" as values
+    - DEFAULT VALUE = alphanumeric
 
 # Usage 1 (results output to CLI)
 * passgen -length=12 -number=3
@@ -22,7 +24,11 @@
 * $ Password #2 is: MSiFR8Gx1yLOJc5V
 * $ Password #3 is: LmYGE03tL2aPLPsL
 
-# Usage 2 (results written to file)
+# Usage 2 (results output to CLI)
+* passgen -length=6 -type numeric
+* $ Password #1 is: 739485
+
+# Usage 3 (results written to file)
 * cd into desired directory: 'C:/Users/USERNAME/Desktop'
 * $ passgen -length=12 -number=3 -file=true
 * $ "Password file generated at: C:\Users\USERNAME\Desktop\passgen-output.txt"

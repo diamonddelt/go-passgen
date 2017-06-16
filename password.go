@@ -18,10 +18,10 @@ type Password struct {
 	isAlphabetical bool
 }
 
-// generatePassword generates a single cryptographically secure password.
+// generateAlphanumericPassword generates a single cryptographically secure password.
 // l (*int) = a pointer to an integer representing the length of the password to generate.
 // Returns the base64-encoded password as a string.
-func generatePassword(l *int) string {
+func generateAlphanumericPassword(l *int) string {
 	b := make([]byte, *l)
 	_, err := crand.Read(b)
 	if err != nil {
@@ -55,14 +55,27 @@ func generateNumericPassword(l *int) int {
 	return r
 }
 
-// GeneratePasswords generates multiple random passwords
+// GenerateAlphanumericPasswords generates multiple random alphanumeric passwords
 // n (*int) = a pointer to a value specifying the number of passwords to generate (int)
 // l (*int) = a pointer to a value specifying the length of each password (int)
 // Returns an array of generated passwords ([]string)
-func GeneratePasswords(n *int, l *int) []string {
+func GenerateAlphanumericPasswords(n *int, l *int) []string {
 	var r []string
 	for i := 0; i < *n; i++ {
-		p := generatePassword(l)
+		p := generateAlphanumericPassword(l)
+		r = append(r, p)
+	}
+	return r
+}
+
+// GenerateNumericPasswords generates multiple random numeric passwords
+// n (*int) = a pointer to a value specifying the number of passwords to generate (int)
+// l (*int) = a pointer to a value specifying the length of each password (int)
+// Returns an array of generated passwords ([]int)
+func GenerateNumericPasswords(n *int, l *int) []string {
+	var r []string
+	for i := 0; i < *n; i++ {
+		p := strconv.Itoa(generateNumericPassword(l))
 		r = append(r, p)
 	}
 	return r
