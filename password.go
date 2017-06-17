@@ -38,20 +38,17 @@ func generateAlphanumericPassword(l *int) string {
 }
 
 // generateNumericPassword generates a single non-cryptographically secure numeric password.
-// Uses the current datetime as a seed value for the RNG.
 // l (*int) = a pointer to an integer representing the length of the password to generate.
-// Returns the random number as an integer.
-func generateNumericPassword(l *int) int {
+// Returns the random number as an string.
+func generateNumericPassword(l *int) string {
 	// Since numeric only passwords can be cracked very easily unless they are extremely long,
 	// this method foregoes the crypto/rand package for math/rand for ease of use
 	mrand.Seed(time.Now().UTC().UnixNano()) // consider moving this to main goroutine for highly concurrent usage
 
-	var r int
-	var tmps string
+	var r string
 	for i := 0; i < *l; i++ {
-		tmps += strconv.Itoa(mrand.Intn(9))
+		r += strconv.Itoa(mrand.Intn(9))
 	}
-	r, _ = strconv.Atoi(tmps) // don't care about the error right now
 	return r
 }
 
@@ -71,11 +68,11 @@ func GenerateAlphanumericPasswords(n *int, l *int) []string {
 // GenerateNumericPasswords generates multiple random numeric passwords
 // n (*int) = a pointer to a value specifying the number of passwords to generate (int)
 // l (*int) = a pointer to a value specifying the length of each password (int)
-// Returns an array of generated passwords ([]int)
+// Returns an array of generated passwords ([]string)
 func GenerateNumericPasswords(n *int, l *int) []string {
 	var r []string
 	for i := 0; i < *n; i++ {
-		p := strconv.Itoa(generateNumericPassword(l))
+		p := generateNumericPassword(l)
 		r = append(r, p)
 	}
 	return r
