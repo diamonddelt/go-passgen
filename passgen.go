@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 )
 
 func main() {
@@ -14,36 +15,20 @@ func main() {
 	// --- END CLI FLAGS
 	flag.Parse()
 
-	// handle the "type" flag
-	// TODO: Move this logic into a function
-	switch {
-	case *t == "a", *t == "alphanumeric":
-		r := GenerateAlphanumericPasswords(n, l)
-		if *f {
-			dir := GetDir()
-			// TODO: Support more than just .txt file extensions
-			ext := ".txt"
-			WritePasswordsToFile(&dir, &ext, &r)
-		} else {
-			for i, v := range r {
-				ct := i + 1
-				fmt.Printf("Password #%d: %s\n", ct, v)
-			}
+	r, err := GeneratePasswords(t, n, l)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if *f {
+		dir := GetDir()
+		// TODO: Support more than just .txt file extensions
+		ext := ".txt"
+		WritePasswordsToFile(&dir, &ext, &r)
+	} else {
+		for i, v := range r {
+			ct := i + 1
+			fmt.Printf("Password #%d: %s\n", ct, v)
 		}
-	case *t == "n", *t == "numeric":
-		r := GenerateNumericPasswords(n, l)
-		if *f {
-			dir := GetDir()
-			// TODO: Support more than just .txt file extensions
-			ext := ".txt"
-			WritePasswordsToFile(&dir, &ext, &r)
-		} else {
-			for i, v := range r {
-				ct := i + 1
-				fmt.Printf("Password #%d: %s\n", ct, v)
-			}
-		}
-	default:
-		fmt.Printf(`"%s" is not a supported flag value for "type". Supported values are "alphanumeric"/"a" and "numeric"/"n".\n`, *t)
 	}
 }
