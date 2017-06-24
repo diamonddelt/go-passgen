@@ -43,8 +43,6 @@ func generateAlphanumericPassword(l *int) string {
 func generateNumericPassword(l *int) string {
 	// Since numeric only passwords can be cracked very easily unless they are extremely long,
 	// this method foregoes the crypto/rand package for math/rand for ease of use
-	mrand.Seed(time.Now().UTC().UnixNano()) // consider moving this to main goroutine for highly concurrent usage
-
 	var r string
 	for i := 0; i < *l; i++ {
 		r += strconv.Itoa(mrand.Intn(9))
@@ -70,6 +68,7 @@ func GenerateAlphanumericPasswords(n *int, l *int) []string {
 // l (*int) = a pointer to a value specifying the length of each password (int)
 // Returns an array of generated passwords ([]string)
 func GenerateNumericPasswords(n *int, l *int) []string {
+	mrand.Seed(time.Now().UTC().UnixNano()) // consider moving this to main goroutine for highly concurrent usage
 	var r []string
 	for i := 0; i < *n; i++ {
 		p := generateNumericPassword(l)

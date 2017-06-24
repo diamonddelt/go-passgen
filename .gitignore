@@ -1,5 +1,6 @@
 # Developer notes
 *.txt
+*.csv
 
 # Compiled artifacts
 *.exe
