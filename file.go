@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/csv"
 	"fmt"
 	"log"
 	"os"
@@ -22,15 +23,32 @@ func WritePasswordsToFile(fp *string, fe *string, dat *[]string) {
 	check(err)
 	defer f.Close()
 
-	// write the file
-	for _, s := range *dat {
-		res := s + "\n"
-		_, err := f.WriteString(res)
-		check(err)
-		// fmt.Printf("Wrote %d bytes\n", i)
+	if *fe == `.csv` {
+		writeToCSV(f, dat)
+	} else {
+		// write the file
+		for _, s := range *dat {
+			res := s + "\n"
+			_, err := f.WriteString(res)
+			check(err)
+			// fmt.Printf("Wrote %d bytes\n", i)
+		}
 	}
 	f.Sync()
 	fmt.Printf("Password file generated at: %s\n", fn)
+}
+
+func writeToCSV(f *os.File, dat *[]string) {
+	var err error
+	writer := csv.NewWriter(f) // create the csv writer
+	defer writer.Flush()       // defer flushing the write buffer until the function returns
+
+	for _, v := range *dat {
+		var row []string
+		row = append(row, v)
+		err = writer.Write(row)
+		check(err)
+	}
 }
 
 // check logs and breaks on all errors specific to file IO

@@ -62,6 +62,13 @@ func GeneratePasswords(t *string, n *int, l *int) ([]string, error) {
 	var err error
 	mrand.Seed(time.Now().UTC().UnixNano()) // this needs to move anywhere it will only be called once; moved after refactor 6/18/17
 
+// GenerateNumericPasswords generates multiple random numeric passwords
+// n (*int) = a pointer to a value specifying the number of passwords to generate (int)
+// l (*int) = a pointer to a value specifying the length of each password (int)
+// Returns an array of generated passwords ([]string)
+func GenerateNumericPasswords(n *int, l *int) []string {
+	mrand.Seed(time.Now().UTC().UnixNano()) // consider moving this to main goroutine for highly concurrent usage
+	var r []string
 	for i := 0; i < *n; i++ {
 		switch {
 		case *t == "a", *t == "alphanumeric":
