@@ -10,7 +10,7 @@ import (
 // WritePasswordsToFile will write an incoming slice of bytes to a file on the local filesystem.
 // fp (*string) = the file path to write the passwords to.
 // fe (*string) = the file extension the file should be.
-// dat ([]byte) = the raw data being written.
+// dat (*[]string) = the raw data being written.
 func WritePasswordsToFile(fp *string, fe *string, dat *[]string) {
 	// TODO: append a datetime to this string
 	n := "passgen-output" // the name of the file itself
@@ -38,6 +38,9 @@ func WritePasswordsToFile(fp *string, fe *string, dat *[]string) {
 	fmt.Printf("Password file generated at: %s\n", fn)
 }
 
+// writeToCSV takes a pointer to a slice of strings, and writes each string iteratively to a csv file object
+// f (*os.File) = the file object which is being written to
+// dat (*[]string) = the data to write to the file object
 func writeToCSV(f *os.File, dat *[]string) {
 	var err error
 	writer := csv.NewWriter(f) // create the csv writer
