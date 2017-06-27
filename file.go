@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 )
 
 // WritePasswordsToFile will write an incoming slice of bytes to a file on the local filesystem.
@@ -12,8 +13,8 @@ import (
 // fe (*string) = the file extension the file should be.
 // dat ([]byte) = the raw data being written.
 func WritePasswordsToFile(fp *string, fe *string, dat *[]string) {
-	// TODO: append a datetime to this string
-	n := "passgen-output" // the name of the file itself
+	dt := time.Now().Format("2006-01-02")
+	n := "passgen-output-" + dt // the name of the file itself
 
 	// TODO: use path/filepath for a better filepath
 	fn := *fp + "/" + n + *fe // the fully qualified filepath with extension
