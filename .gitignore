@@ -1,8 +1,6 @@
-# Developer notes
-*.txt
-*.csv
-
 # Compiled artifacts
 *.exe
 *.sh
 *.tar.gz
+*.txt
+*.csv
